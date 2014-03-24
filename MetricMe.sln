@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.Client", "MetricMe.Client\MetricMe.Client.csproj", "{EEA7C103-2709-44BB-A926-C006C32BCC4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.Server", "MetricMe.Server\MetricMe.Server.csproj", "{3DF1F81F-2C3B-4370-ADE2-CE3D9BF7EEE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.IntegrationTests", "MetricMe.IntegrationTests\MetricMe.IntegrationTests.csproj", "{FBD63ECD-C13D-4D17-9030-ED40CC6C48CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.UnitTests", "MetricMe.UnitTests\MetricMe.UnitTests.csproj", "{23467622-F28C-42FE-A78D-4DED301E6BC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.Dashboard", "MetricMe.Dashboard\MetricMe.Dashboard.csproj", "{510C7892-E081-4528-930F-F57327988E8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.DashboardHost", "MetricMe.DashboardHost\MetricMe.DashboardHost.csproj", "{BABA948E-18B0-4FB8-A98E-5FE53143087F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EEA7C103-2709-44BB-A926-C006C32BCC4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEA7C103-2709-44BB-A926-C006C32BCC4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEA7C103-2709-44BB-A926-C006C32BCC4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEA7C103-2709-44BB-A926-C006C32BCC4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DF1F81F-2C3B-4370-ADE2-CE3D9BF7EEE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DF1F81F-2C3B-4370-ADE2-CE3D9BF7EEE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DF1F81F-2C3B-4370-ADE2-CE3D9BF7EEE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DF1F81F-2C3B-4370-ADE2-CE3D9BF7EEE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBD63ECD-C13D-4D17-9030-ED40CC6C48CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBD63ECD-C13D-4D17-9030-ED40CC6C48CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBD63ECD-C13D-4D17-9030-ED40CC6C48CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBD63ECD-C13D-4D17-9030-ED40CC6C48CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23467622-F28C-42FE-A78D-4DED301E6BC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23467622-F28C-42FE-A78D-4DED301E6BC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23467622-F28C-42FE-A78D-4DED301E6BC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23467622-F28C-42FE-A78D-4DED301E6BC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{510C7892-E081-4528-930F-F57327988E8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{510C7892-E081-4528-930F-F57327988E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{510C7892-E081-4528-930F-F57327988E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{510C7892-E081-4528-930F-F57327988E8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BABA948E-18B0-4FB8-A98E-5FE53143087F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BABA948E-18B0-4FB8-A98E-5FE53143087F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BABA948E-18B0-4FB8-A98E-5FE53143087F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BABA948E-18B0-4FB8-A98E-5FE53143087F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
