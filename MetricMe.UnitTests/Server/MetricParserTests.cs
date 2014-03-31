@@ -73,16 +73,48 @@ namespace MetricMe.UnitTests.Server
         }
 
         [Test]
+        public void Parse_WithGaugeMetricWithDirectionNegative_IsValidAndCorrect()
+        {
+            const string CounterKey = "mytest.metric";
+            const int GaugeValue = 300;
+            var metricString = "{0}:-{1}|g".Formatted(CounterKey, GaugeValue);
+
+            var parseResults = MetricParser.Parse(metricString);
+            parseResults.IsValid.Should().Be(true, "given metric should be valid");
+            parseResults.Name.Should().Be(CounterKey, "metric name should have been parsed correctly");
+            parseResults.Value.Should().Be(GaugeValue, "metric value should have been parsed correctly");
+            parseResults.Type.Should().Be(MetricType.Gauge, "timing metric was passed");
+            parseResults.GaugeDirection.Should().Be(GaugeDirection.Minus, "gauge direction was specified");
+            parseResults.SampleRate.HasValue.Should().BeFalse("no sample rate was passed");
+        }
+
+        [Test]
+        public void Parse_WithGaugeMetricWithDirectionPositive_IsValidAndCorrect()
+        {
+            const string CounterKey = "mytest.metric";
+            const int GaugeValue = 300;
+            var metricString = "{0}:+{1}|g".Formatted(CounterKey, GaugeValue);
+
+            var parseResults = MetricParser.Parse(metricString);
+            parseResults.IsValid.Should().Be(true, "given metric should be valid");
+            parseResults.Name.Should().Be(CounterKey, "metric name should have been parsed correctly");
+            parseResults.Value.Should().Be(GaugeValue, "metric value should have been parsed correctly");
+            parseResults.Type.Should().Be(MetricType.Gauge, "timing metric was passed");
+            parseResults.GaugeDirection.Should().Be(GaugeDirection.Plus, "gauge direction was specified");
+            parseResults.SampleRate.HasValue.Should().BeFalse("no sample rate was passed");
+        }
+
+        [Test]
         public void Parse_WithSetMetric_IsValidAndCorrect()
         {
             const string CounterKey = "mytest.metric";
-            const int SetValue = 300;
+            const string SetValue = "300";
             var metricString = "{0}:{1}|s".Formatted(CounterKey, SetValue);
 
             var parseResults = MetricParser.Parse(metricString);
             parseResults.IsValid.Should().Be(true, "given metric should be valid");
             parseResults.Name.Should().Be(CounterKey, "metric name should have been parsed correctly");
-            parseResults.Value.Should().Be(SetValue, "metric value should have been parsed correctly");
+            parseResults.ValueString.Should().Be(SetValue, "metric value should have been parsed correctly");
             parseResults.Type.Should().Be(MetricType.Set, "timing metric was passed");
             parseResults.SampleRate.HasValue.Should().BeFalse("no sample rate was passed");
         }

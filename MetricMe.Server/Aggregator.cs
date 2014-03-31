@@ -9,6 +9,10 @@ namespace MetricMe.Server
     {
         private readonly Dictionary<string, int> counters = new Dictionary<string, int>();
 
+        private readonly Dictionary<string, int> gauges = new Dictionary<string, int>();
+
+        private readonly Dictionary<string, HashSet<string>> sets = new Dictionary<string, HashSet<string>>();
+
         public void Add(string metric)
         {
             var parsedInformation = MetricParser.Parse(metric);
@@ -38,19 +42,31 @@ namespace MetricMe.Server
             }
         }
 
-        public void Clear()
+        public void ClearAggregatedValues()
         {
             this.counters.Clear();
+            this.sets.Clear();
         }
 
         public MetricCollection GetAggregatedCollection()
         {
-            return new MetricCollection { Counters = BuildCounters() };
+            return new MetricCollection
+                       {
+                           Counters = BuildCounters(),
+                           Gauges =
+                               gauges.Select(c => new MetricItem<int> { Name = c.Key, Value = c.Value }),
+                           Sets = BuildSets()
+                       };
         }
 
-        private IEnumerable<MetricItem> BuildCounters()
+        private IEnumerable<MetricItem<int>> BuildCounters()
         {
-            return counters.Select(c => new MetricItem { Name = c.Key, Value = c.Value });
+            return counters.Select(c => new MetricItem<int> { Name = c.Key, Value = c.Value });
+        }
+
+        private IEnumerable<MetricItem<int>> BuildSets()
+        {
+            return sets.Select(s => new MetricItem<int> { Name = s.Key, Value = s.Value.Count });
         }
 
         private void ProcessCounter(MetricParseInformation metricInfo)
@@ -60,10 +76,31 @@ namespace MetricMe.Server
 
         private void ProcessGauge(MetricParseInformation metricInfo)
         {
+            if (metricInfo.GaugeDirection == GaugeDirection.NotSpecified)
+            {
+                gauges[metricInfo.Name] = metricInfo.Value;
+                return;
+            }
+
+            if (metricInfo.GaugeDirection == GaugeDirection.Plus)
+            {
+                gauges[metricInfo.Name] = gauges.GetOrDefault(metricInfo.Name) + metricInfo.Value;
+            }
+            else
+            {
+                gauges[metricInfo.Name] = gauges.GetOrDefault(metricInfo.Name) - metricInfo.Value;
+            }
         }
 
         private void ProcessSet(MetricParseInformation metricInfo)
         {
+            HashSet<string> valuesSoFar;
+            if (!sets.TryGetValue(metricInfo.Name, out valuesSoFar))
+            {
+                valuesSoFar = new HashSet<string>();
+                sets[metricInfo.Name] = valuesSoFar;
+            }
+            valuesSoFar.Add(metricInfo.ValueString);
         }
 
         private void ProcessTiming(MetricParseInformation metricInfo)

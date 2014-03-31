@@ -1,9 +1,9 @@
 ﻿namespace MetricMe.Server
 {
-    public class MetricItem
+    public class MetricItem<TValueType>
     {
         public string Name { get; set; }
 
-        public int Value { get; set; }
+        public TValueType Value { get; set; }
     }
 }

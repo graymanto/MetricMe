@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 using Castle.Core.Logging;
 
@@ -18,18 +15,18 @@ namespace MetricMe.Server
 
         public UdpMetricListener(int udplistenerPort)
         {
-            socket = new UdpClient(udplistenerPort);
+            this.socket = new UdpClient(udplistenerPort);
         }
 
         public ILogger Log
         {
             get
             {
-                return log ?? (log = new NullLogger());
+                return this.log ?? (this.log = new NullLogger());
             }
             set
             {
-                log = value;
+                this.log = value;
             }
         }
 
@@ -38,7 +35,7 @@ namespace MetricMe.Server
             get
             {
                 return
-                    Observable.FromAsync(socket.ReceiveAsync)
+                    Observable.FromAsync(this.socket.ReceiveAsync)
                         .Retry()
                         .Repeat()
                         .Finally(OnSubscriptionFinished)
@@ -58,7 +55,7 @@ namespace MetricMe.Server
 
         public void Dispose()
         {
-            socket.Close();
+            this.socket.Close();
         }
     }
 }

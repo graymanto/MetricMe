@@ -45,7 +45,7 @@ namespace MetricMe.Server
             this.processTask.Wait();
 
             var collection = this.aggregator.GetAggregatedCollection();
-            this.aggregator.Clear();
+            this.aggregator.ClearAggregatedValues();
 
             return collection;
         }
@@ -57,7 +57,7 @@ namespace MetricMe.Server
             this.processTask.Wait();
 
             var collection = this.aggregator.GetAggregatedCollection();
-            this.aggregator.Clear();
+            this.aggregator.ClearAggregatedValues();
 
             Collect();
 

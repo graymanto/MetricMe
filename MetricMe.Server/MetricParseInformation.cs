@@ -8,6 +8,10 @@
 
         public int Value { get; set; }
 
+        public GaugeDirection GaugeDirection { get; set; } 
+
+        public string ValueString { get; set; }
+
         public double? SampleRate { get; set; }
 
         public MetricType Type { get; set; }

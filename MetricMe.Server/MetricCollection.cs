@@ -6,18 +6,18 @@ namespace MetricMe.Server
     {
         public MetricCollection()
         {
-            Gauges = new List<MetricItem>();
-            Counters = new List<MetricItem>();
-            Timers = new List<MetricItem>();
-            Sets = new List<MetricItem>();
+            Gauges = new List<MetricItem<int>>();
+            Counters = new List<MetricItem<int>>();
+            Timers = new List<MetricItem<int>>();
+            Sets = new List<MetricItem<int>>();
         }
 
-        public IEnumerable<MetricItem> Gauges { get; set; }
+        public IEnumerable<MetricItem<int>> Gauges { get; set; }
 
-        public IEnumerable<MetricItem> Counters { get; set; }
+        public IEnumerable<MetricItem<int>> Counters { get; set; }
 
-        public IEnumerable<MetricItem> Timers { get; set; }
+        public IEnumerable<MetricItem<int>> Timers { get; set; }
 
-        public IEnumerable<MetricItem> Sets { get; set; }
+        public IEnumerable<MetricItem<int>> Sets { get; set; }
     }
 }

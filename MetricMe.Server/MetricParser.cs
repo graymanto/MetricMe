@@ -1,4 +1,6 @@
-﻿using MetricMe.Server.Constants;
+﻿using Castle.Core.Internal;
+
+using MetricMe.Server.Constants;
 
 namespace MetricMe.Server
 {
@@ -23,14 +25,27 @@ namespace MetricMe.Server
                 return info;
             }
 
-            int metricValue;
-            if (!int.TryParse(packetSections[0], out metricValue))
+            var metricType = ParseForMetricType(packetSections[1]);
+            if (metricType == MetricType.Unknown)
             {
                 return info;
             }
 
-            var metricType = ParseForMetricType(packetSections[1]);
-            if (metricType == MetricType.Unknown)
+            int metricValue = -1;
+            string valueString;
+            string sign = null;
+            if (metricType == MetricType.Gauge
+                && (packetSections[0].StartsWith("+") || packetSections[0].StartsWith("-")))
+            {
+                sign = packetSections[0].Substring(0, 1);
+                valueString = packetSections[0].Substring(1);
+            }
+            else
+            {
+                valueString = packetSections[0];
+            }
+
+            if (metricType!= MetricType.Set && !int.TryParse(valueString, out metricValue))
             {
                 return info;
             }
@@ -53,8 +68,17 @@ namespace MetricMe.Server
             info.Value = metricValue;
             info.Type = metricType;
             info.SampleRate = sampleRate;
+            info.GaugeDirection = GetGaugeDirection(sign);
+            info.ValueString = valueString;
 
             return info;
+        }
+
+        private static GaugeDirection GetGaugeDirection(string sign)
+        {
+            if (sign.IsNullOrEmpty())
+                return GaugeDirection.NotSpecified;
+            return sign == "+" ? GaugeDirection.Plus : GaugeDirection.Minus;
         }
 
         private static MetricType ParseForMetricType(string metricType)
