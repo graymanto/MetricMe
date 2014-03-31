@@ -17,7 +17,7 @@ namespace MetricMe.Server
 
         private readonly IList<IDisposable> subscriptions = new List<IDisposable>();
 
-        private readonly MetricAccumulator accumulator = new MetricAccumulator();
+        private readonly MetricGatherer gatherer = new MetricGatherer();
 
         private readonly Timer timer = new Timer(1000 * 60);
 
@@ -31,7 +31,7 @@ namespace MetricMe.Server
         {
             listeners.ForEach(SubscribeListener);
 
-            accumulator.Accumulate();
+            this.gatherer.Collect();
 
             timer.Elapsed += FlushMetrics;
             timer.Enabled = true;
@@ -39,7 +39,7 @@ namespace MetricMe.Server
 
         private void SubscribeListener(IMetricListener listener)
         {
-            var subscription = listener.Metrics.SubscribeOn(Scheduler.Default).Subscribe(m => accumulator.Queue(m));
+            var subscription = listener.Metrics.SubscribeOn(Scheduler.Default).Subscribe(m => this.gatherer.Queue(m));
             subscriptions.Add(subscription);
         }
 
@@ -47,7 +47,7 @@ namespace MetricMe.Server
         {
             subscriptions.ForEach(s => s.Dispose());
 
-            var finalMetrics = accumulator.Stop();
+            var finalMetrics = this.gatherer.Stop();
 
             SendToBackEnd(finalMetrics);
         }
@@ -56,7 +56,7 @@ namespace MetricMe.Server
         {
             timer.Enabled = false;
 
-            var metrics = accumulator.Flush();
+            var metrics = this.gatherer.Flush();
             SendToBackEnd(metrics);
 
             timer.Enabled = true;
