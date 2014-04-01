@@ -64,13 +64,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregator.cs" />
+    <Compile Include="Backends\ConsoleBackend.cs" />
+    <Compile Include="Backends\GraphiteBackend.cs" />
+    <Compile Include="Configuration\GlobalConfig.cs" />
+    <Compile Include="Configuration\GraphiteSettings.cs" />
     <Compile Include="Constants\MetricStringSections.cs" />
     <Compile Include="Coordinator.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\MathematicalExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="GaugeDirection.cs" />
+    <Compile Include="Graphite\GraphiteUdpClient.cs" />
+    <Compile Include="Graphite\IGraphiteClient.cs" />
+    <Compile Include="Graphite\GraphiteClientExtensions.cs" />
     <Compile Include="IBackend.cs" />
     <Compile Include="IMetricListener.cs" />
     <Compile Include="MetricGatherer.cs" />
@@ -91,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MetricMe.Core\MetricMe.Core.csproj">
+      <Project>{8b90b9b3-f8ba-4ea3-a91a-65d25509f59c}</Project>
+      <Name>MetricMe.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

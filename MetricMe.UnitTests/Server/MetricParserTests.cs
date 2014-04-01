@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 
+using MetricMe.Core.Extensions;
 using MetricMe.Server;
-using MetricMe.Server.Extensions;
 
 using NUnit.Framework;
 

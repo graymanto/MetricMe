@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.Dashboard", "Metri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.DashboardHost", "MetricMe.DashboardHost\MetricMe.DashboardHost.csproj", "{BABA948E-18B0-4FB8-A98E-5FE53143087F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricMe.Core", "MetricMe.Core\MetricMe.Core.csproj", "{8B90B9B3-F8BA-4EA3-A91A-65D25509F59C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{BABA948E-18B0-4FB8-A98E-5FE53143087F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BABA948E-18B0-4FB8-A98E-5FE53143087F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BABA948E-18B0-4FB8-A98E-5FE53143087F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B90B9B3-F8BA-4EA3-A91A-65D25509F59C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B90B9B3-F8BA-4EA3-A91A-65D25509F59C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B90B9B3-F8BA-4EA3-A91A-65D25509F59C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B90B9B3-F8BA-4EA3-A91A-65D25509F59C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
