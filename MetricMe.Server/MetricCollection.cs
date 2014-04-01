@@ -19,5 +19,7 @@ namespace MetricMe.Server
         public IEnumerable<MetricItem<int>> Timers { get; set; }
 
         public IEnumerable<MetricItem<int>> Sets { get; set; }
+
+        public IEnumerable<TimerData> TimerData { get; set; } 
     }
 }

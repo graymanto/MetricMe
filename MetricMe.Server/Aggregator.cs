@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using MetricMe.Server.Extensions;
@@ -12,6 +13,8 @@ namespace MetricMe.Server
         private readonly Dictionary<string, int> gauges = new Dictionary<string, int>();
 
         private readonly Dictionary<string, HashSet<string>> sets = new Dictionary<string, HashSet<string>>();
+
+        private readonly List<Tuple<string, int>> timers = new List<Tuple<string, int>>();
 
         public void Add(string metric)
         {
@@ -46,6 +49,7 @@ namespace MetricMe.Server
         {
             this.counters.Clear();
             this.sets.Clear();
+            this.timers.Clear();
         }
 
         public MetricCollection GetAggregatedCollection()
@@ -54,19 +58,27 @@ namespace MetricMe.Server
                        {
                            Counters = BuildCounters(),
                            Gauges =
-                               gauges.Select(c => new MetricItem<int> { Name = c.Key, Value = c.Value }),
-                           Sets = BuildSets()
+                               this.gauges.Select(
+                                   c => new MetricItem<int> { Name = c.Key, Value = c.Value }),
+                           Sets = BuildSets(),
+                           Timers = BuildTimers(),
+                           TimerData = TimerCalculation.CalculateTimerData(this.timers)
                        };
         }
 
         private IEnumerable<MetricItem<int>> BuildCounters()
         {
-            return counters.Select(c => new MetricItem<int> { Name = c.Key, Value = c.Value });
+            return this.counters.Select(c => new MetricItem<int> { Name = c.Key, Value = c.Value });
         }
 
         private IEnumerable<MetricItem<int>> BuildSets()
         {
-            return sets.Select(s => new MetricItem<int> { Name = s.Key, Value = s.Value.Count });
+            return this.sets.Select(s => new MetricItem<int> { Name = s.Key, Value = s.Value.Count });
+        }
+
+        private IEnumerable<MetricItem<int>> BuildTimers()
+        {
+            return this.timers.Select(t => new MetricItem<int> { Name = t.Item1, Value = t.Item2 });
         }
 
         private void ProcessCounter(MetricParseInformation metricInfo)
@@ -78,33 +90,34 @@ namespace MetricMe.Server
         {
             if (metricInfo.GaugeDirection == GaugeDirection.NotSpecified)
             {
-                gauges[metricInfo.Name] = metricInfo.Value;
+                this.gauges[metricInfo.Name] = metricInfo.Value;
                 return;
             }
 
             if (metricInfo.GaugeDirection == GaugeDirection.Plus)
             {
-                gauges[metricInfo.Name] = gauges.GetOrDefault(metricInfo.Name) + metricInfo.Value;
+                this.gauges[metricInfo.Name] = this.gauges.GetOrDefault(metricInfo.Name) + metricInfo.Value;
             }
             else
             {
-                gauges[metricInfo.Name] = gauges.GetOrDefault(metricInfo.Name) - metricInfo.Value;
+                this.gauges[metricInfo.Name] = this.gauges.GetOrDefault(metricInfo.Name) - metricInfo.Value;
             }
         }
 
         private void ProcessSet(MetricParseInformation metricInfo)
         {
             HashSet<string> valuesSoFar;
-            if (!sets.TryGetValue(metricInfo.Name, out valuesSoFar))
+            if (!this.sets.TryGetValue(metricInfo.Name, out valuesSoFar))
             {
                 valuesSoFar = new HashSet<string>();
-                sets[metricInfo.Name] = valuesSoFar;
+                this.sets[metricInfo.Name] = valuesSoFar;
             }
             valuesSoFar.Add(metricInfo.ValueString);
         }
 
         private void ProcessTiming(MetricParseInformation metricInfo)
         {
+            this.timers.Add(new Tuple<string, int>(metricInfo.Name, metricInfo.Value));
         }
     }
 }

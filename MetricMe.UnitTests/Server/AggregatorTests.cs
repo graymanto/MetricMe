@@ -290,5 +290,54 @@ namespace MetricMe.UnitTests.Server
             metricItem2.Name.Should().Be(SetKey2);
             metricItem2.Value.Should().Be(1);
         }
+
+        [Test]
+        public void Add_Timer_ExpectTimerInSet()
+        {
+            var aggregator = new Aggregator();
+
+            const string TimerKey = "mytest.metric";
+            const int TimerAmount = 234;
+            var timerMetric = "{0}:{1}|ms".Formatted(TimerKey, TimerAmount);
+
+            aggregator.Add(timerMetric);
+
+            var metrics = aggregator.GetAggregatedCollection();
+
+            var timers = metrics.Timers.ToList();
+
+            timers.Should().NotBeEmpty("a timer metric was added");
+            timers.Should().HaveCount(1, "a timer metric was added");
+            var metricItem = timers.First();
+            metricItem.Name.Should().Be(TimerKey);
+            metricItem.Value.Should().Be(TimerAmount);
+        }
+
+        [Test]
+        public void Add_TwoTimers_ExpectTwoTimersInSet()
+        {
+            var aggregator = new Aggregator();
+
+            const string TimerKey = "mytest.metric";
+            const int TimerAmount = 234;
+            var timerMetric = "{0}:{1}|ms".Formatted(TimerKey, TimerAmount);
+
+            aggregator.Add(timerMetric);
+            aggregator.Add(timerMetric);
+
+            var metrics = aggregator.GetAggregatedCollection();
+
+            var timers = metrics.Timers.ToList();
+
+            timers.Should().NotBeEmpty("a timer metric was added");
+            timers.Should().HaveCount(2, "2 timer metrics were added");
+            var metricItem = timers.First();
+            metricItem.Name.Should().Be(TimerKey);
+            metricItem.Value.Should().Be(TimerAmount);
+
+            var metricItem2 = timers.Skip(1).First();
+            metricItem2.Name.Should().Be(TimerKey);
+            metricItem2.Value.Should().Be(TimerAmount);
+        }
     }
 }
