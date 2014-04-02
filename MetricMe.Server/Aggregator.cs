@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MetricMe.Server.Configuration;
 using MetricMe.Server.Extensions;
 
 namespace MetricMe.Server
 {
+    /// <summary>
+    /// Aggregates metrics
+    /// </summary>
     public class Aggregator
     {
         private readonly Dictionary<string, int> counters = new Dictionary<string, int>();
@@ -16,6 +20,10 @@ namespace MetricMe.Server
 
         private readonly List<Tuple<string, int>> timers = new List<Tuple<string, int>>();
 
+        /// <summary>
+        /// Adds the specified metric into the aggregated collections.
+        /// </summary>
+        /// <param name="metric">The metric.</param>
         public void Add(string metric)
         {
             var parsedInformation = MetricParser.Parse(metric);
@@ -45,6 +53,9 @@ namespace MetricMe.Server
             }
         }
 
+        /// <summary>
+        /// Clears the aggregated values.
+        /// </summary>
         public void ClearAggregatedValues()
         {
             this.counters.Clear();
@@ -52,11 +63,25 @@ namespace MetricMe.Server
             this.timers.Clear();
         }
 
+        /// <summary>
+        /// Builds an aggregated collection of metrics from all the metrics collected since the last reset.
+        /// </summary>
+        /// <returns>The aggregated metrics.</returns>
         public MetricCollection GetAggregatedCollection()
         {
+            var aggregatedCounters = BuildCounters().ToList();
+
             return new MetricCollection
                        {
-                           Counters = BuildCounters(),
+                           Counters = aggregatedCounters,
+                           CounterRates =
+                               aggregatedCounters.Select(
+                                   c =>
+                                   new MetricItem<double>
+                                       {
+                                           Name = c.Name,
+                                           Value = (double)c.Value / ((double)GlobalConfig.FlushInterval / 1000)
+                                       }),
                            Gauges =
                                this.gauges.Select(
                                    c => new MetricItem<int> { Name = c.Key, Value = c.Value }),

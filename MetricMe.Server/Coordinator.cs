@@ -5,6 +5,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Timers;
 
+using MetricMe.Server.Configuration;
 using MetricMe.Server.Extensions;
 
 namespace MetricMe.Server
@@ -19,14 +20,22 @@ namespace MetricMe.Server
 
         private readonly MetricGatherer gatherer = new MetricGatherer();
 
-        private readonly Timer timer = new Timer(1000 * 60);
+        private readonly Timer timer = new Timer(GlobalConfig.FlushInterval);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Coordinator"/> class.
+        /// </summary>
+        /// <param name="listeners">The listeners.</param>
+        /// <param name="backEnds">The back ends.</param>
         public Coordinator(IEnumerable<IMetricListener> listeners, IEnumerable<IBackend> backEnds)
         {
             this.listeners = listeners;
             this.backEnds = backEnds;
         }
 
+        /// <summary>
+        /// Starts the coordinator.
+        /// </summary>
         public void Start()
         {
             listeners.ForEach(SubscribeListener);

@@ -8,13 +8,17 @@ namespace MetricMe.Server
         {
             Gauges = new List<MetricItem<int>>();
             Counters = new List<MetricItem<int>>();
+            CounterRates = new List<MetricItem<double>>();
             Timers = new List<MetricItem<int>>();
+            TimerData = new List<TimerData>();
             Sets = new List<MetricItem<int>>();
         }
 
         public IEnumerable<MetricItem<int>> Gauges { get; set; }
 
         public IEnumerable<MetricItem<int>> Counters { get; set; }
+
+        public IEnumerable<MetricItem<double>> CounterRates { get; set; }
 
         public IEnumerable<MetricItem<int>> Timers { get; set; }
 

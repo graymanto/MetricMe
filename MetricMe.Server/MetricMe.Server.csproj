@@ -66,8 +66,10 @@
     <Compile Include="Aggregator.cs" />
     <Compile Include="Backends\ConsoleBackend.cs" />
     <Compile Include="Backends\GraphiteBackend.cs" />
+    <Compile Include="Configuration\DefaultConfigurationValues.cs" />
     <Compile Include="Configuration\GlobalConfig.cs" />
     <Compile Include="Configuration\GraphiteSettings.cs" />
+    <Compile Include="Constants\ConfigurationKeys.cs" />
     <Compile Include="Constants\MetricStringSections.cs" />
     <Compile Include="Coordinator.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />

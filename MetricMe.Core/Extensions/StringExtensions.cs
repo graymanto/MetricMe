@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace MetricMe.Core.Extensions
@@ -26,6 +28,28 @@ namespace MetricMe.Core.Extensions
         public static bool IsNullOrEmpty(this string input)
         {
             return string.IsNullOrEmpty(input);
+        }
+
+        /// <summary>
+        /// Determines whether the specified string is empty or populated only by spaces.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public static bool IsBlank(this string input)
+        {
+            return input.IsNullOrEmpty() || input.IsSpaces();
+        }
+
+        /// <summary>
+        /// Determines whether the specified string is populated only by spaces.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public static bool IsSpaces(this string input)
+        {
+            return input.All(c => c == ' ');
         }
 
         /// <summary>
@@ -57,6 +81,18 @@ namespace MetricMe.Core.Extensions
         }
 
         /// <summary>
+        /// Joins two strings together using a dot if the join string contains data or without dot otherwise.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="stringToJoin">The string to join.</param>
+        /// <returns>The dot joined string.</returns>
+        [DebuggerStepThrough]
+        public static string JoinWithDotIfPopulated(this string input, string stringToJoin)
+        {
+            return stringToJoin.IsSpaces() ? input + stringToJoin : input.JoinWith(stringToJoin, ".");
+        }
+
+        /// <summary>
         /// Concats the specified input.
         /// </summary>
         /// <param name="input">The input.</param>
@@ -78,6 +114,30 @@ namespace MetricMe.Core.Extensions
         public static byte[] AsByteArray(this string input, Encoding encoding = null)
         {
             return (encoding ?? Encoding.UTF8).GetBytes(input);
+        }
+
+        /// <summary>
+        /// Splits the specified string on the given split string.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="splitField">The split field.</param>
+        /// <returns>A split string.</returns>
+        [DebuggerStepThrough]
+        public static string[] Split(this string input, string splitField)
+        {
+            return input.Split(new[] { splitField }, StringSplitOptions.None);
+        }
+
+        /// <summary>
+        /// Splits the specified string on the given split string.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="splitField">The split field.</param>
+        /// <returns>A split string.</returns>
+        [DebuggerStepThrough]
+        public static string[] Split(this string input, string splitField, StringSplitOptions options)
+        {
+            return input.Split(new[] { splitField }, options);
         }
     }
 }

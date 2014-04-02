@@ -6,7 +6,7 @@ using MetricMe.Server.Extensions;
 
 using NUnit.Framework;
 
-namespace MetricMe.UnitTests.Extensions
+namespace MetricMe.UnitTests.Server.Extensions
 {
     [TestFixture]
     public class DictionaryExtensionsTests

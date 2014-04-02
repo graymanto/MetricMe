@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
+using MetricMe.Core;
 using MetricMe.Core.Extensions;
 using MetricMe.Server.Configuration;
 using MetricMe.Server.Graphite;
@@ -44,11 +46,14 @@ namespace MetricMe.Server.Backends
         /// <param name="metrics">The metrics.</param>
         public void Flush(MetricCollection metrics)
         {
-            var statStrings = new List<string>();
-            var timestampSuffix = " " + DateTime.UtcNow.ToJavaUnixTimestamp() + "\n";
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
 
-            var counters = ProcessCounters(metrics.Counters, timestampSuffix);
-            var timers = ProcessTimers(metrics.Timers, timestampSuffix);
+            var statStrings = new List<string>();
+            var timestampSuffix = " " + Math.Truncate(SystemTime.UtcNow.ToJavaUnixTimestamp()) + "\n";
+
+            var counters = ProcessCounters(metrics.Counters, metrics.CounterRates, timestampSuffix);
+            var timers = ProcessTimerData(metrics.TimerData, timestampSuffix);
             var gauges = ProcessGauges(metrics.Gauges, timestampSuffix);
             var sets = ProcessSets(metrics.Sets, timestampSuffix);
 
@@ -57,7 +62,21 @@ namespace MetricMe.Server.Backends
             statStrings.AddRange(gauges);
             statStrings.AddRange(sets);
 
-            // TODO: some standard extra stats bits
+            stopWatch.Stop();
+
+            var numberOfStats = statStrings.Count;
+            var statsPrefix = globalPrefix.JoinWithDot(GlobalConfig.StatsPrefix);
+            var numStatsMetric = CreateStatString(
+                statsPrefix.JoinWithDot("numStats"),
+                numberOfStats.ToString(),
+                timestampSuffix);
+            var calculationTimeMetric = CreateStatString(
+                statsPrefix.JoinWithDot("graphiteStats.calculationtime"),
+                stopWatch.ElapsedMilliseconds.ToString(),
+                timestampSuffix);
+
+            statStrings.Add(numStatsMetric);
+            statStrings.Add(calculationTimeMetric);
 
             var completeStatsString = statStrings.Combine();
             this.client.Send(completeStatsString);
@@ -65,12 +84,30 @@ namespace MetricMe.Server.Backends
 
         private IEnumerable<string> ProcessSets(IEnumerable<MetricItem<int>> sets, string timestampSuffix)
         {
-            yield break;
+            var prefix = this.globalPrefix.JoinWithDot(this.setPrefix);
+
+            return from set in sets
+                   let keyedPrefix = prefix.JoinWithDot(set.Name).JoinWithDot("count")
+                   select CreateStatString(keyedPrefix, set.Value.ToString(), timestampSuffix);
         }
 
-        private IEnumerable<string> ProcessTimers(IEnumerable<MetricItem<int>> timers, string timestampSuffix)
+        private IEnumerable<string> ProcessTimerData(IEnumerable<TimerData> timers, string timestampSuffix)
         {
-            yield break;
+            var prefix = this.globalPrefix.JoinWithDot(this.timerPrefix);
+
+            foreach (var timerData in timers)
+            {
+                var keyedPrefix = prefix.JoinWithDot(timerData.Key);
+
+                yield return CreateStatString(keyedPrefix.JoinWithDot("count"), timerData.Count.ToString(), timestampSuffix);
+                yield return CreateStatString(keyedPrefix.JoinWithDot("countps"), timerData.CountPs.ToString(), timestampSuffix);
+                yield return CreateStatString(keyedPrefix.JoinWithDot("lower"), timerData.Lower.ToString(), timestampSuffix);
+                yield return CreateStatString(keyedPrefix.JoinWithDot("upper"), timerData.Upper.ToString(), timestampSuffix);
+                yield return CreateStatString(keyedPrefix.JoinWithDot("mean"), timerData.Mean.ToString(), timestampSuffix);
+                yield return CreateStatString(keyedPrefix.JoinWithDot("median"), timerData.Median.ToString(), timestampSuffix);
+                yield return CreateStatString(keyedPrefix.JoinWithDot("std"), timerData.Std.ToString(), timestampSuffix);
+                yield return CreateStatString(keyedPrefix.JoinWithDot("sum"), timerData.Sum.ToString(), timestampSuffix);
+            }
         }
 
         private IEnumerable<string> ProcessGauges(IEnumerable<MetricItem<int>> gauges, string timeStampSuffix)
@@ -79,35 +116,54 @@ namespace MetricMe.Server.Backends
 
             return from gauge in gauges
                    let nameSpace = prefix.JoinWithDot(gauge.Name)
-                   select
-                       nameSpace.JoinWithDot(this.globalSuffix).JoinTo(gauge.Value.ToString()).JoinTo(timeStampSuffix);
+                   select CreateStatString(nameSpace, gauge.Value.ToString(), timeStampSuffix);
         }
 
-        private IEnumerable<string> ProcessCounters(IEnumerable<MetricItem<int>> counters, string timeStampSuffix)
+        /// <summary>
+        /// Generates counter graphite messages from the counter collections.
+        /// </summary>
+        /// <param name="counters">The counters.</param>
+        /// <param name="counterRates">The counter rates.</param>
+        /// <param name="timeStampSuffix">The time stamp suffix.</param>
+        /// <returns>Counter graphite messages.</returns>
+        private IEnumerable<string> ProcessCounters(
+            IEnumerable<MetricItem<int>> counters,
+            IEnumerable<MetricItem<double>> counterRates,
+            string timeStampSuffix)
         {
             var prefix = this.globalPrefix.JoinWithDot(this.counterPrefix);
+            int index = 0;
+            var rateList = counterRates.ToList();
+
             foreach (var counter in counters)
             {
                 var nameSpace = prefix.JoinWithDot(counter.Name);
-                // TODO: need rates here
-                var counterRate = counter.Value;
+                var counterRate = rateList[index].Value;
 
-                yield return
-                    nameSpace.JoinWithDot("rate")
-                        .JoinWithDot(this.globalSuffix)
-                        .JoinTo(counterRate.ToString())
-                        .JoinTo(timeStampSuffix);
-                ;
+                yield return CreateStatString(nameSpace.JoinWithDot("rate"), counterRate.ToString(), timeStampSuffix);
 
                 if (GlobalConfig.Graphite.FlushCounts)
                 {
-                    yield return
-                        nameSpace.JoinWithDot("count")
-                            .JoinWithDot(this.globalSuffix)
-                            .JoinTo(counter.Value.ToString())
-                            .JoinTo(timeStampSuffix);
+                    yield return CreateStatString(nameSpace.JoinWithDot("count"), counter.Value.ToString(), timeStampSuffix);
                 }
+
+                index++;
             }
+        }
+
+        /// <summary>
+        /// Creates the graphite stat string from a set of inputs.
+        /// </summary>
+        /// <param name="keyedPrefix">The keyed prefix.</param>
+        /// <param name="metricValue">The metric value.</param>
+        /// <param name="timestampSuffix">The timestamp suffix.</param>
+        /// <returns></returns>
+        private string CreateStatString(string keyedPrefix, string metricValue, string timestampSuffix)
+        {
+            return keyedPrefix
+                    .JoinWithDotIfPopulated(this.globalSuffix)
+                    .JoinTo(metricValue)
+                    .JoinTo(timestampSuffix);
         }
     }
 }
