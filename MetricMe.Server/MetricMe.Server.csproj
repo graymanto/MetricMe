@@ -30,18 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core">
-      <HintPath>..\packages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor">
-      <HintPath>..\packages\Castle.Windsor.3.2.1\lib\net45\Castle.Windsor.dll</HintPath>
-    </Reference>
-    <Reference Include="clrzmq">
-      <HintPath>..\packages\clrzmq.2.2.5\lib\clrzmq.dll</HintPath>
-    </Reference>
-    <Reference Include="clrzmq-ext">
-      <HintPath>..\packages\clrzmq.2.2.5\lib\clrzmq-ext.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive.Core">
@@ -65,14 +53,16 @@
   <ItemGroup>
     <Compile Include="Aggregator.cs" />
     <Compile Include="Backends\ConsoleBackend.cs" />
+    <Compile Include="Backends\DefaultBackendProvider.cs" />
     <Compile Include="Backends\GraphiteBackend.cs" />
+    <Compile Include="Backends\NullBackend.cs" />
     <Compile Include="Configuration\DefaultConfigurationValues.cs" />
     <Compile Include="Configuration\GlobalConfig.cs" />
     <Compile Include="Configuration\GraphiteSettings.cs" />
     <Compile Include="Constants\ConfigurationKeys.cs" />
     <Compile Include="Constants\MetricStringSections.cs" />
     <Compile Include="Coordinator.cs" />
-    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\MathematicalExtensions.cs" />
     <Compile Include="GaugeDirection.cs" />
@@ -80,7 +70,9 @@
     <Compile Include="Graphite\IGraphiteClient.cs" />
     <Compile Include="Graphite\GraphiteClientExtensions.cs" />
     <Compile Include="IBackend.cs" />
-    <Compile Include="IMetricListener.cs" />
+    <Compile Include="IBackendProvider.cs" />
+    <Compile Include="Listeners\IMetricListener.cs" />
+    <Compile Include="Listeners\TcpMetricListener.cs" />
     <Compile Include="MetricGatherer.cs" />
     <Compile Include="MetricCollection.cs" />
     <Compile Include="MetricItem.cs" />
@@ -90,12 +82,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimerCalculation.cs" />
     <Compile Include="TimerData.cs" />
-    <Compile Include="UdpMetricListener.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="libzmq.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Compile Include="Listeners\UdpMetricListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

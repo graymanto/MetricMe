@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MetricMe.Server
+namespace MetricMe.Server.Listeners
 {
     public interface IMetricListener
     {

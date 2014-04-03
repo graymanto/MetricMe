@@ -11,7 +11,8 @@ namespace MetricMe.Server.Graphite
 
         public GraphiteUdpClient(string host, int port)
         {
-            this.client = new UdpClient(host, port);
+            this.client = new UdpClient { ExclusiveAddressUse = false };
+            this.client.Connect(host, port);
         }
 
         public void Send(string metricName, int metricValue, DateTime timestamp)

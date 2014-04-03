@@ -21,9 +21,6 @@ namespace MetricMe.Core.Extensions
         {
             var converter = TypeDescriptor.GetConverter(typeof(T));
 
-            if (!converter.CanConvertFrom(typeof(T)))
-                return defaultValue;
-
             try
             {
                 return converter.CanConvertFrom(typeof(string)) ? (T)converter.ConvertFromString(key) : defaultValue;
@@ -45,13 +42,10 @@ namespace MetricMe.Core.Extensions
         {
             var converter = TypeDescriptor.GetConverter(conversionType);
 
-            if (!converter.CanConvertFrom(conversionType))
-                return conversionType.DefaultValue();
-
             try
             {
                 return converter.CanConvertFrom(typeof(string))
-                           ? (Type)converter.ConvertFromString(key)
+                           ? converter.ConvertFromString(key)
                            : conversionType.DefaultValue();
             }
             catch (NotSupportedException)

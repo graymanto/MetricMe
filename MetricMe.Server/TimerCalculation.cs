@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MetricMe.Server.Configuration;
 using MetricMe.Server.Extensions;
 
 namespace MetricMe.Server
@@ -31,8 +32,7 @@ namespace MetricMe.Server
                            Median = itemValues.Median(),
                            Count = itemValues.Count,
                            Std = itemValues.StandardDeviation(),
-                           CountPs = itemValues.Count / (60000 / 1000)
-                           // TODO: this should be the flush interval
+                           CountPs = itemValues.Count / (GlobalConfig.FlushInterval / 1000)
                        };
         }
     }

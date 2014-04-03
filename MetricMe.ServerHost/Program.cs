@@ -1,15 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MetricMe.Core;
+
+using Topshelf;
 
 namespace MetricMe.ServerHost
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            AssemblyLoader.LoadAllInAppDomainPath();
+
+            HostFactory.Run(
+                x =>
+                    {
+                        x.Service<Host>(
+                            s =>
+                                {
+                                    s.ConstructUsing(n => new Host());
+                                    s.WhenStarted(h => h.Start());
+                                    s.WhenStopped(h => h.Stop());
+                                });
+                        x.RunAsLocalSystem();
+                        x.SetDescription("MetricMe Server");
+                        x.SetDisplayName("MetricMe Server");
+                        x.SetServiceName("MetricMeServer");
+                    });
         }
     }
 }

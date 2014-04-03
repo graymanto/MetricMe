@@ -2,7 +2,6 @@
 using System.Linq;
 
 using MetricMe.Core.Extensions;
-using MetricMe.Server.Extensions;
 
 namespace MetricMe.Server.Backends
 {
@@ -20,7 +19,8 @@ namespace MetricMe.Server.Backends
 
         private void WriteOutTimer(TimerData timer)
         {
-            const string BasicTimerFormat = "Timer {0}: Std {1} | Upper {2} | Lower {3} | Count {4}| CountPs {5}| Sum {6} | Mean {7} | Median {8}";
+            const string BasicTimerFormat =
+                "Timer {0}: Std {1} | Upper {2} | Lower {3} | Count {4}| CountPs {5}| Sum {6} | Mean {7} | Median {8}";
             var formattedTimer = BasicTimerFormat.Formatted(
                 timer.Key,
                 timer.Std,

@@ -18,6 +18,10 @@
 
         public const int GraphitePort = 8989;
 
+        public const int UdpListeningPort = 8990;
+
+        public const int TcpListeningPort = 8991;
+
         public const string StatsPrefix = "statsd";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MetricMe.Core.Configuration;
+using MetricMe.Core.Extensions;
 using MetricMe.Server.Constants;
 
 namespace MetricMe.Server.Configuration
@@ -51,7 +52,29 @@ namespace MetricMe.Server.Configuration
         {
             get
             {
-                return ConfigurationFetcher.Get(ConfigurationKeys.BackEnds, "Console").Split(';');
+                var backends = ConfigurationFetcher.Get(ConfigurationKeys.BackEnds, string.Empty);
+                if (backends.IsNullOrEmpty())
+                    return new string[0];
+
+                return backends.Split(';');
+            }
+        }
+
+        /// <summary>
+        /// Gets the required listeners.
+        /// </summary>
+        /// <value>
+        /// The listeners.
+        /// </value>
+        public static string[] Listeners
+        {
+            get
+            {
+                var listeners = ConfigurationFetcher.Get(ConfigurationKeys.Listeners, string.Empty);
+                if (listeners.IsNullOrEmpty())
+                    return new string[0];
+
+                return listeners.Split(';');
             }
         }
 
@@ -66,6 +89,38 @@ namespace MetricMe.Server.Configuration
             get
             {
                 return ConfigurationFetcher.Get(ConfigurationKeys.StatsPrefix, DefaultConfigurationValues.StatsPrefix);
+            }
+        }
+
+        /// <summary>
+        /// Gets the UDP listening port.
+        /// </summary>
+        /// <value>
+        /// The UDP listening port.
+        /// </value>
+        public static int UdpListeningPort
+        {
+            get
+            {
+                return ConfigurationFetcher.Get(
+                    ConfigurationKeys.UdpListeningPort,
+                    DefaultConfigurationValues.UdpListeningPort);
+            }
+        }
+
+        /// <summary>
+        /// Gets the TCP listening port.
+        /// </summary>
+        /// <value>
+        /// The TCP listening port.
+        /// </value>
+        public static int TcpListeningPort
+        {
+            get
+            {
+                return ConfigurationFetcher.Get(
+                    ConfigurationKeys.TcpListeningPort,
+                    DefaultConfigurationValues.TcpListeningPort);
             }
         }
 

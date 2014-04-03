@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MetricMe.Server.Extensions
+namespace MetricMe.Core.Extensions
 {
     public static class CollectionExtensions
     {

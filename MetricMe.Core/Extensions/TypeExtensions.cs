@@ -18,5 +18,15 @@ namespace MetricMe.Core.Extensions
 
             return null;
         }
+
+        /// <summary>
+        /// Creates a new instance of the type using the default constructor.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        public static dynamic CreateNew(this Type input)
+        {
+            return Activator.CreateInstance(input);
+        }
     }
 }

@@ -5,8 +5,9 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Timers;
 
+using MetricMe.Core.Extensions;
 using MetricMe.Server.Configuration;
-using MetricMe.Server.Extensions;
+using MetricMe.Server.Listeners;
 
 namespace MetricMe.Server
 {

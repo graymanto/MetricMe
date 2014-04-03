@@ -1,6 +1,5 @@
-﻿using Castle.Core.Internal;
-
-using MetricMe.Server.Constants;
+﻿using MetricMe.Server.Constants;
+using MetricMe.Core.Extensions;
 
 namespace MetricMe.Server
 {
@@ -31,7 +30,7 @@ namespace MetricMe.Server
                 return info;
             }
 
-            int metricValue = -1;
+            var metricValue = -1;
             string valueString;
             string sign = null;
             if (metricType == MetricType.Gauge
@@ -45,7 +44,7 @@ namespace MetricMe.Server
                 valueString = packetSections[0];
             }
 
-            if (metricType!= MetricType.Set && !int.TryParse(valueString, out metricValue))
+            if (metricType != MetricType.Set && !int.TryParse(valueString, out metricValue))
             {
                 return info;
             }
@@ -77,7 +76,9 @@ namespace MetricMe.Server
         private static GaugeDirection GetGaugeDirection(string sign)
         {
             if (sign.IsNullOrEmpty())
+            {
                 return GaugeDirection.NotSpecified;
+            }
             return sign == "+" ? GaugeDirection.Plus : GaugeDirection.Minus;
         }
 
