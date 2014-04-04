@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Text;
+
+using MetricMe.Server.Constants;
 
 namespace MetricMe.Server.Listeners
 {
@@ -28,25 +31,46 @@ namespace MetricMe.Server.Listeners
                         .Retry()
                         .Repeat()
                         .Finally(OnSubscriptionFinished)
-                        .Select(GetMessageFromClient);
+                        .SelectMany(GetMessageFromClient);
             }
         }
 
-        private string GetMessageFromClient(TcpClient client)
+        private IEnumerable<string> GetMessageFromClient(TcpClient client)
         {
             using (var stream = client.GetStream())
             {
-                var reader = new BinaryReader(stream);
-                var length = reader.ReadInt32();
+                InternalMetricQueue.AddCount(MetricMeInternalMetrics.ConnectionsOpened);
 
-                var bytes = reader.ReadBytes(length);
-                return Encoding.Default.GetString(bytes);
+                do
+                {
+                    byte[] bytes;
+                    try
+                    {
+                        var reader = new BinaryReader(stream);
+                        var length = reader.ReadInt32();
+
+                        bytes = reader.ReadBytes(length);
+
+                    }
+                    catch (IOException e)
+                    {
+                        Debug.WriteLine(e);
+                        yield break;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e);
+                        yield break;
+                    }
+                    yield return Encoding.Default.GetString(bytes);
+                }
+                while (stream.DataAvailable);
             }
         }
 
         private void OnSubscriptionFinished()
         {
-            Debug.WriteLine("Udp listener subscription finished.");
+            Debug.WriteLine("Tcp listener subscription finished.");
         }
 
         public void Dispose()
@@ -59,7 +83,10 @@ namespace MetricMe.Server.Listeners
         {
             if (!disposing)
             {
+                return;
             }
+
+            listener.Stop();
         }
     }
 }

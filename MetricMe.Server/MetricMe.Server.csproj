@@ -72,6 +72,7 @@
     <Compile Include="IBackend.cs" />
     <Compile Include="IBackendProvider.cs" />
     <Compile Include="Listeners\IMetricListener.cs" />
+    <Compile Include="Listeners\InternalMetricQueue.cs" />
     <Compile Include="Listeners\TcpMetricListener.cs" />
     <Compile Include="MetricGatherer.cs" />
     <Compile Include="MetricCollection.cs" />

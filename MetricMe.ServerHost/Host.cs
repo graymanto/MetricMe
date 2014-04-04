@@ -46,6 +46,8 @@ namespace MetricMe.ServerHost
 
             if (requireUdp)
                 yield return new UdpMetricListener(GlobalConfig.UdpListeningPort);
+
+            yield return new InternalMetricQueue();
         }
 
         private IEnumerable<IBackend> GetRequiredBackends()
