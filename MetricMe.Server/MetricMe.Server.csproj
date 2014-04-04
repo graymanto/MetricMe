@@ -60,6 +60,7 @@
     <Compile Include="Configuration\GlobalConfig.cs" />
     <Compile Include="Configuration\GraphiteSettings.cs" />
     <Compile Include="Constants\ConfigurationKeys.cs" />
+    <Compile Include="Constants\MetricMeInternalMetrics.cs" />
     <Compile Include="Constants\MetricStringSections.cs" />
     <Compile Include="Coordinator.cs" />
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Graphite\GraphiteClientExtensions.cs" />
     <Compile Include="IBackend.cs" />
     <Compile Include="IBackendProvider.cs" />
+    <Compile Include="Listeners\HttpMetricListener.cs" />
     <Compile Include="Listeners\IMetricListener.cs" />
     <Compile Include="Listeners\InternalMetricQueue.cs" />
     <Compile Include="Listeners\TcpMetricListener.cs" />

@@ -22,6 +22,8 @@
 
         public const int TcpListeningPort = 8991;
 
+        public const int HttpListeningPort = 88;
+
         public const string StatsPrefix = "statsd";
     }
 }

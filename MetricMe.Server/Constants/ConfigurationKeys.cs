@@ -6,6 +6,8 @@
 
         public const string TcpListeningPort = "TcpListeningPort";
 
+        public const string HttpListeningPort = "HttpListeningPort";
+
         public const string FlushInterval = "FlushInterval";
 
         public const string StatsPrefix = "StatsPrefix";

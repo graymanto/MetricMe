@@ -31,6 +31,7 @@ namespace MetricMe.ServerHost
         private IEnumerable<IMetricListener> GetRequiredListeners()
         {
             bool requireUdp;
+            bool requireHttp = false;
             bool requireTcp = requireUdp = true;
 
             var specifiedListeners = GlobalConfig.Listeners;
@@ -39,6 +40,7 @@ namespace MetricMe.ServerHost
             {
                 requireTcp = specifiedListeners.Contains("Tcp");
                 requireUdp = specifiedListeners.Contains("Udp");
+                requireHttp = specifiedListeners.Contains("Http");
             }
 
             if (requireTcp)
@@ -46,6 +48,9 @@ namespace MetricMe.ServerHost
 
             if (requireUdp)
                 yield return new UdpMetricListener(GlobalConfig.UdpListeningPort);
+
+            if (requireHttp)
+                yield return new HttpMetricListener(GlobalConfig.HttpListeningPort);
 
             yield return new InternalMetricQueue();
         }

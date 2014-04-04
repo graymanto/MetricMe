@@ -109,6 +109,22 @@ namespace MetricMe.Server.Configuration
         }
 
         /// <summary>
+        /// Gets the HTTP listening port.
+        /// </summary>
+        /// <value>
+        /// The HTTP listening port.
+        /// </value>
+        public static int HttpListeningPort
+        {
+            get
+            {
+                return ConfigurationFetcher.Get(
+                    ConfigurationKeys.HttpListeningPort,
+                    DefaultConfigurationValues.HttpListeningPort);
+            }
+        }
+
+        /// <summary>
         /// Gets the TCP listening port.
         /// </summary>
         /// <value>
