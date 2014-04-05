@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MetricMe.Core;
 using MetricMe.Server.Configuration;
 using MetricMe.Server.Extensions;
 

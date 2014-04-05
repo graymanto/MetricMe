@@ -1,4 +1,6 @@
-﻿namespace MetricMe.Server
+﻿using MetricMe.Core;
+
+namespace MetricMe.Server
 {
     public class MetricParseInformation
     {

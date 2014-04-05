@@ -39,8 +39,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\DefaultConfigurationValues.cs" />
+    <Compile Include="Messages\CounterMessage.cs" />
+    <Compile Include="Messages\GaugeMessage.cs" />
+    <Compile Include="MetricConfiguration.cs" />
+    <Compile Include="Metrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stats.cs" />
+    <Compile Include="Messages\StatsDMessage.cs" />
+    <Compile Include="Transport\IMetricTransport.cs" />
+    <Compile Include="Transport\MetricTranportType.cs" />
+    <Compile Include="Transport\NullMetricTransport.cs" />
+    <Compile Include="Transport\TcpMetricTransport.cs" />
+    <Compile Include="Transport\UdpMetricTransport.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MetricMe.Core\MetricMe.Core.csproj">
+      <Project>{8b90b9b3-f8ba-4ea3-a91a-65d25509f59c}</Project>
+      <Name>MetricMe.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

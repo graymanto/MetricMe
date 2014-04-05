@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 
+using MetricMe.Core;
 using MetricMe.Core.Extensions;
 using MetricMe.Server;
 

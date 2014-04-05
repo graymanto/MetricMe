@@ -1,4 +1,4 @@
-﻿using MetricMe.Server.Constants;
+﻿using MetricMe.Core;
 using MetricMe.Core.Extensions;
 
 namespace MetricMe.Server
@@ -24,7 +24,7 @@ namespace MetricMe.Server
                 return info;
             }
 
-            var metricType = ParseForMetricType(packetSections[1]);
+            var metricType = MetricTypeParser.CreateFromString(packetSections[1]);
             if (metricType == MetricType.Unknown)
             {
                 return info;
@@ -80,28 +80,6 @@ namespace MetricMe.Server
                 return GaugeDirection.NotSpecified;
             }
             return sign == "+" ? GaugeDirection.Plus : GaugeDirection.Minus;
-        }
-
-        private static MetricType ParseForMetricType(string metricType)
-        {
-            if (metricType == MetricStringSections.Counter)
-            {
-                return MetricType.Counter;
-            }
-            if (metricType == MetricStringSections.Gauge)
-            {
-                return MetricType.Gauge;
-            }
-            if (metricType == MetricStringSections.Set)
-            {
-                return MetricType.Set;
-            }
-            if (metricType == MetricStringSections.Timer)
-            {
-                return MetricType.Timing;
-            }
-
-            return MetricType.Unknown;
         }
     }
 }

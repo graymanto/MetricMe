@@ -61,7 +61,6 @@
     <Compile Include="Configuration\GraphiteSettings.cs" />
     <Compile Include="Constants\ConfigurationKeys.cs" />
     <Compile Include="Constants\MetricMeInternalMetrics.cs" />
-    <Compile Include="Constants\MetricStringSections.cs" />
     <Compile Include="Coordinator.cs" />
     <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="MetricItem.cs" />
     <Compile Include="MetricParseInformation.cs" />
     <Compile Include="MetricParser.cs" />
-    <Compile Include="MetricType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimerCalculation.cs" />
     <Compile Include="TimerData.cs" />

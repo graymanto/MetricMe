@@ -1,4 +1,4 @@
-﻿namespace MetricMe.Server.Constants
+﻿namespace MetricMe.Core.Constants
 {
     public class MetricStringSections
     {

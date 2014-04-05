@@ -1,4 +1,4 @@
-﻿namespace MetricMe.Server
+﻿namespace MetricMe.Core
 {
     public enum MetricType
     {
