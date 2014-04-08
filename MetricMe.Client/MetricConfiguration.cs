@@ -26,5 +26,11 @@ namespace MetricMe.Client
             TransportSetter(new UdpMetricTransport(host, port));
             return this;
         }
+
+        public MetricConfiguration WithTcpTransport(string host = "localhost", int port = 8989)
+        {
+            TransportSetter(new TcpMetricTransport(host, port));
+            return this;
+        }
     }
 }

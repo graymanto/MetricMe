@@ -2,26 +2,26 @@
 
 namespace MetricMe.Client.Messages
 {
-    public abstract class StatsDMessage
+    public abstract class StatsDMessage<TMessage>
     {
         private readonly string name;
 
-        private readonly int number;
+        private readonly TMessage messageValue;
 
         private readonly double? sampleRate;
 
         protected abstract string MessageType { get; }
 
-        protected StatsDMessage(string name, int number, double? sampleRate = null)
+        protected StatsDMessage(string name, TMessage messageValue, double? sampleRate = null)
         {
             this.name = name;
-            this.number = number;
+            this.messageValue = messageValue;
             this.sampleRate = sampleRate;
         }
 
         public override string ToString()
         {
-            var metric = "{0}:{1}|{2}".Formatted(this.name, this.number, this.MessageType);
+            var metric = "{0}:{1}|{2}".Formatted(this.name, this.messageValue, MessageType);
 
             return this.sampleRate.HasValue ? metric + "|@@" + this.sampleRate : metric;
         }

@@ -2,9 +2,9 @@
 
 namespace MetricMe.Client.Messages
 {
-    public class CounterMessage : StatsDNumericMessage
+    public class SetMessage : StatsDMessage<string>
     {
-        public CounterMessage(string name, int messageValue, double? sampleRate = null)
+        public SetMessage(string name, string messageValue, double? sampleRate = null)
             : base(name, messageValue, sampleRate)
         {
         }
@@ -13,7 +13,7 @@ namespace MetricMe.Client.Messages
         {
             get
             {
-                return MetricStringSections.Counter;
+                return MetricStringSections.Set;
             }
         }
     }

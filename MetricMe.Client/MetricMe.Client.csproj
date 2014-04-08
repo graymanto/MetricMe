@@ -40,8 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\DefaultConfigurationValues.cs" />
+    <Compile Include="Extensions\MetricExtensions.cs" />
     <Compile Include="Messages\CounterMessage.cs" />
     <Compile Include="Messages\GaugeMessage.cs" />
+    <Compile Include="Messages\SetMessage.cs" />
+    <Compile Include="Messages\StatsDNumericMessage.cs" />
+    <Compile Include="Messages\TimingMessage.cs" />
     <Compile Include="MetricConfiguration.cs" />
     <Compile Include="Metrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,6 +56,7 @@
     <Compile Include="Transport\NullMetricTransport.cs" />
     <Compile Include="Transport\TcpMetricTransport.cs" />
     <Compile Include="Transport\UdpMetricTransport.cs" />
+    <Compile Include="UsingTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MetricMe.Core\MetricMe.Core.csproj">

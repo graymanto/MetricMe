@@ -2,10 +2,10 @@
 
 namespace MetricMe.Client.Messages
 {
-    public class GaugeMessage : StatsDMessage
+    public class GaugeMessage : StatsDNumericMessage
     {
-        public GaugeMessage(string name, int number, double? sampleRate = null)
-            : base(name, number, sampleRate)
+        public GaugeMessage(string name, int messageValue, double? sampleRate = null)
+            : base(name, messageValue, sampleRate)
         {
         }
 
@@ -13,7 +13,7 @@ namespace MetricMe.Client.Messages
         {
             get
             {
-                return MetricStringSections.Counter;
+                return MetricStringSections.Gauge;
             }
         }
     }
